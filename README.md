@@ -1,6 +1,7 @@
 # CMB114_CW4_F223975
 
-This repository houses all of the files and directories for Dr Kenny Jolley's CW4 project for CMB114.
+This repository houses all of the files and directories for Dr Kenny Jolley's CW4 project for CMB114,
+in which a software application surrounding molecular dynamics must be produced.
 
 The requirements for the project are set out below:
 
