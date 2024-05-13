@@ -30,7 +30,9 @@ In order to install the libraries required, type the following into the command 
 'pip install PIL'
 
 RDKit is the library that allows the application to process molecular data.
+
 PIL is the library that allows us to view the molecules as images and have them drawn to a tkinter canvas. 
+
 tkinter is used for the GUI itself, however, this is a standard library of Python and, therefore, does not need to be specifically installed. 
 
 # Purpose of the Application:
