@@ -25,8 +25,9 @@ When installing Python it is important to check the PATH tickbox when prompted s
 
 In order to install the libraries required, type the following into the command prompt (or terminal on MacOS):
 
-pip install rdkit
-pip install PIL
+'pip install rdkit'
+
+'pip install PIL'
 
 RDKit is the library that allows the application to process molecular data.
 PIL is the library that allows us to view the molecules as images and have them drawn to a tkinter canvas. 
