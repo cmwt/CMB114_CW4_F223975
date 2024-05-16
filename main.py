@@ -10,6 +10,7 @@
 
 import tkinter as tk 
 from tkinter import ttk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 from rdkit import Chem
 from rdkit.Chem import Draw
@@ -74,13 +75,26 @@ def draw_ace():
     ace_canvas.create_image(0, 0, anchor=tk.NW, image=ace_photo)
     ace_canvas.grid(row=2, column=1)
 
+
+# Function to draw the molecule from SMILES
 def draw_custom():
-    mol = Chem.MolFromSmiles(str(custom_entry.get()))
-    custom_img = Draw.MolToImage(mol)
-    custom_photo = ImageTk.PhotoImage(custom_img)
-    custom_canvas = tk.Canvas(frame1, width = custom_photo.width(), height = custom_photo.height())
-    custom_canvas.create_image(0, 0, anchor=tk.NW, image=custom_photo)
-    custom_canvas.grid(row=2, column=2)
+    smiles = custom_entry.get()  # Get the SMILES string from the entry widget
+    try:
+        mol = Chem.MolFromSmiles(smiles)  # Convert the SMILES string to a molecule object
+        if mol is None:  # Checks if input is a valid SMILES code
+            raise ValueError("Invalid SMILES string")
+        
+        img = Draw.MolToImage(mol)  # Draw the molecule and get a PIL image
+        tk_img = ImageTk.PhotoImage(img)
+        
+        # Clears previous image from the canvas
+        canvas.delete("all")
+        canvas.create_image(150, 150, image=tk_img)  # Display the image on the canvas
+        canvas.image = tk_img  # Keep a reference to avoid garbage collection
+        
+    except Exception as e:  # Catch any exceptions that occur
+        messagebox.showerror("Error", str(e))  # Show an error message box
+        
 
 # Clear function erase contents of right frame
 def clear_frame():
@@ -102,44 +116,54 @@ molecules = ["Benzene", "Naphthalene", "Cyclohexane", "Acetone"]
 
 # *** Left Frame ***
 
-frame = ttk.Frame(root, width = 300, height = 750, borderwidth = 5, relief = tk.GROOVE)
+frame = ttk.Frame(root, width = 300, height = 1000, borderwidth = 5, relief = tk.GROOVE)
+frame.grid_propagate(False)
 frame.grid(row=1, column=1, sticky="NW")
 
 drop_label = tk.Label(frame, text = "Pre-Programmed Molecules:")
-drop_label.grid(row=1, column=1, sticky="W")
+drop_label.grid(row=1, column=1, sticky="W", pady=5)
 drop = ttk.Combobox(frame, value= molecules)
-drop.grid(row=2, column=1, sticky="W")
+drop.grid(row=2, column=1, sticky="W", pady=5)
 drop.bind("<<ComboboxSelected>>", option_selected)
 
 clear_but = tk.Button(frame, text="Clear", command=clear_frame)
-clear_but.grid(row=2, column=2, sticky="W")
+clear_but.grid(row=2, column=2, sticky="W", pady=5, padx=5)
 
 custom_label = tk.Label(frame, text="Custom SMILES code:")
-custom_label.grid(row=3, column=1, sticky="W")
+custom_label.grid(row=3, column=1, sticky="W", pady=5)
 
 custom_entry = tk.Entry(frame)
-custom_entry.grid(row=4, column=1, sticky="W")
+custom_entry.grid(row=4, column=1, sticky="W", pady=5)
 
 draw_button = tk.Button(frame, text="Draw", command=lambda:[draw_custom()])
-draw_button.grid(row=4, column=2, sticky="W")
+draw_button.grid(row=4, column=2, sticky="W", pady=5, padx=5)
 
 atom_label = tk.Label(frame, text= "Atom Numbers:")
-atom_label.grid(row=5, column=1, sticky="W")
+atom_label.grid(row=5, column=1, sticky="W", pady=5)
 atom_num = tk.Button(frame, text = "On", command=atom_switch)
-atom_num.grid(row=5, column=2, sticky="W")
+atom_num.grid(row=5, column=2, sticky="W", pady=5, padx=5)
+
+prop_label = tk.Label(frame, text="Molecule Properties:")
+prop_label.grid(row=6, column=1, sticky="W", pady=5)
 
 reference_label = tk.Label(frame)
-reference_label.grid(row=6, column=1, sticky="W")
+reference_label.grid(row=7, column=1, sticky="W", pady=5)
 
 
-text = {"Benzene":"Molar Mass: 78.11 g/mol\nBoiling Point: 80.1°C\nMelting Point: 5.5°C",
-        "Naphthalene":"Molar Mass: 128.17 g/mol",
+text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1°C\nMelting Point: 5.5°C",
+        "Naphthalene":"Naphthalene:\nMolar Mass: 128.17 g/mol\nBoiling Point: 218°C\nMelting Point: 80.3°C",
+        "Cyclohexane":"Cyclohexane:\nMolar Mass: 84.16 g/mol\nBoiling Point: 80.8°C\nMelting Point: 6.5°C",
+        "Acetone":"Acetone:\nMolar Mass: 58.1 g/mol\nBoiling Point: 56°C\nMelting Point: -95°C"
                   }
 
 # *** Right Frame ***
 
-frame1 = ttk.Frame(root, width = 1200, height = 750, borderwidth = 5, relief = tk.GROOVE)
+frame1 = ttk.Frame(root, width = 1200, height = 1000, borderwidth = 5, relief = tk.GROOVE)
+frame1.grid_propagate(False)
 frame1.grid(row=1, column=2, sticky="NW")
+
+canvas = tk.Canvas(frame1, width=300, height=300)
+canvas.grid(row=2, column=2)
 
 # *** Molecule images ***
 
