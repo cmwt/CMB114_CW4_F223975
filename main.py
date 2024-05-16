@@ -13,14 +13,17 @@ from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from rdkit import Chem
+from rdkit.Chem import AllChem
 from rdkit.Chem import Draw
+from rdkit.Chem import rdMolTransforms
 from lib.mol import *
+from lib.orca import *
 
-# **********************
-# *                    *
-# *     Functions      *
-# *                    *
-# **********************
+# ***************************
+# *                         *
+# *     Main Functions      *
+# *                         *
+# ***************************
 
 # Function to print properties text in left frame
 def reference_text(x):
@@ -100,6 +103,44 @@ def draw_custom():
 def clear_frame():
     for widgets in frame1.winfo_children():
         widgets.destroy()
+    # reference_label.configure(delete) <-- this needs amending so that it clears the label if the canvas is cleared
+
+# *****************
+# *               *
+# *     Orca      *
+# *               *
+# *****************
+
+def orca_input_file(basis_set, calc_type, coordinates):
+    with open("output.txt", "w") as f:
+        f.write(f"! {calc_type} {basis_set}\n")
+        f.write("* xyz 0 1\n")
+        f.write(coordinates)
+        f.write("*\n")
+
+def generate_orca():
+    basis_set = basis_set_drop.get()
+    calc_type = calc_type_drop.get()
+    smiles = custom_entry.get()
+    
+    # Generate cartesian coordinates from SMILES
+    mol2 = Chem.MolFromSmiles(smiles)
+    if mol2 is None:
+        status_label.config(text="Invalid SMILES code")
+        return
+    
+    mol2 = Chem.AddHs(mol2)
+    AllChem.EmbedMolecule(mol2, randomSeed=42)
+    AllChem.UFFOptimizeMolecule(mol2)
+    
+    coordinates = ""
+    conf = mol2.GetConformer()
+    for atom in mol2.GetAtoms():
+        pos = conf.GetAtomPosition(atom.GetIdx())
+        coordinates += f"  {atom.GetSymbol()}  {pos.x:.6f}  {pos.y:.6f}  {pos.z:.6f}\n"
+
+    orca_input_file(basis_set, calc_type, coordinates)
+    status_label.config(text="Input file created: output.txt")
 
 # ***************************
 # *                         *
@@ -116,7 +157,7 @@ molecules = ["Benzene", "Naphthalene", "Cyclohexane", "Acetone"]
 
 # *** Left Frame ***
 
-frame = ttk.Frame(root, width = 300, height = 1000, borderwidth = 5, relief = tk.GROOVE)
+frame = ttk.Frame(root, width = 400, height = 1000, borderwidth = 5, relief = tk.GROOVE)
 frame.grid_propagate(False)
 frame.grid(row=1, column=1, sticky="NW")
 
@@ -149,6 +190,22 @@ prop_label.grid(row=6, column=1, sticky="W", pady=5)
 reference_label = tk.Label(frame)
 reference_label.grid(row=7, column=1, sticky="W", pady=5)
 
+basis_label = tk.Label(frame, text="Select Basis Set:")
+basis_label.grid(row=8, column=1, pady=5)
+basis_set_drop = ttk.Combobox(frame, textvariable=basis_sets, values=basis_sets)
+basis_set_drop.grid(row=8, column=2, padx=10, pady=5)
+
+calc_label = tk.Label(frame, text="Select Calculation Type")
+calc_label.grid(row=9, column=1, pady=5)
+calc_type_drop = ttk.Combobox(frame, textvariable=calc_types, values=calc_types)
+calc_type_drop.grid(row=9, column=2, padx=10, pady=5)
+
+gen_but = tk.Button(frame, text="Generate Orca Input", command=generate_orca)
+gen_but.grid(row=10, column=0, columnspan=2, pady=5)
+
+status_label = tk.Label(frame, text="")
+status_label.grid(row=11, column=0, columnspan=2, pady=5)
+
 
 text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1°C\nMelting Point: 5.5°C",
         "Naphthalene":"Naphthalene:\nMolar Mass: 128.17 g/mol\nBoiling Point: 218°C\nMelting Point: 80.3°C",
@@ -158,7 +215,7 @@ text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1°C\nMe
 
 # *** Right Frame ***
 
-frame1 = ttk.Frame(root, width = 1200, height = 1000, borderwidth = 5, relief = tk.GROOVE)
+frame1 = ttk.Frame(root, width = 2000, height = 1000, borderwidth = 5, relief = tk.GROOVE)
 frame1.grid_propagate(False)
 frame1.grid(row=1, column=2, sticky="NW")
 
