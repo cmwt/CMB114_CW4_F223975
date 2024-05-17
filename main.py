@@ -16,6 +16,7 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit.Chem import Draw
 from rdkit.Chem import rdMolTransforms
+import os
 from lib.mol import *
 from lib.orca import *
 
@@ -112,8 +113,18 @@ def clear_frame():
 # *****************
 
 def orca_input_file(basis_set, calc_type, coordinates):
-    with open("output.txt", "w") as f:
-        f.write(f"! {calc_type} {basis_set}\n")
+
+    filename = custom_entry.get() # Sets the filename to whatever the SMILES string is 
+    
+    input_dir = "ORCA_input"
+    if not os.path.exists(input_dir): # If ORCA directory does not exist yet, create it
+        os.makedirs(input_dir)
+
+    filepath = os.path.join(input_dir, filename) # Allows a file to be opened within the new directory
+
+    with open(f"{filepath}.txt", "w") as f:
+        f.write("# CW4 - Molecular Dynamics generated ORCA input file\n")
+        f.write(f"\n! {calc_type} {basis_set}\n")
         f.write("* xyz 0 1\n")
         f.write(coordinates)
         f.write("*\n")
@@ -140,7 +151,7 @@ def generate_orca():
         coordinates += f"  {atom.GetSymbol()}  {pos.x:.6f}  {pos.y:.6f}  {pos.z:.6f}\n"
 
     orca_input_file(basis_set, calc_type, coordinates)
-    status_label.config(text="Input file created: output.txt")
+    status_label.config(text="Input file created in ORCA_input")
 
 # ***************************
 # *                         *
