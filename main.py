@@ -30,19 +30,6 @@ from lib.orca import *
 def reference_text(x):
     reference_label.config(text = str(text[x]) )
 
-# Function to turn atom number button on/off
-global atom_on # Sets button to "On" automatically when the GUI starts
-atom_on = True
-
-def atom_switch():
-    global atom_on
-    if atom_on:
-       atom_num.config(text = "Off") # Switches the button to "Off" when clicked
-       atom_on = False 
-    else:
-        atom_num.config(text = "On") # Switches the button to "On" when clicked again
-        atom_on = True
-
 # Function to draw correct molecule and text when selected form dropdown
 def option_selected(event):
     if drop.get() == "Benzene":
@@ -104,7 +91,7 @@ def draw_custom():
 def clear_frame():
     for widgets in frame1.winfo_children():
         widgets.destroy()
-    # reference_label.configure(delete) <-- this needs amending so that it clears the label if the canvas is cleared
+    reference_label.configure(text="")
 
 # *****************
 # *               *
@@ -189,11 +176,6 @@ custom_entry.grid(row=4, column=1, sticky="W", pady=5)
 
 draw_button = tk.Button(frame, text="Draw", command=lambda:[draw_custom()])
 draw_button.grid(row=4, column=2, sticky="W", pady=5, padx=5)
-
-atom_label = tk.Label(frame, text= "Atom Numbers:")
-atom_label.grid(row=5, column=1, sticky="W", pady=5)
-atom_num = tk.Button(frame, text = "On", command=atom_switch)
-atom_num.grid(row=5, column=2, sticky="W", pady=5, padx=5)
 
 prop_label = tk.Label(frame, text="Molecule Properties:")
 prop_label.grid(row=6, column=1, sticky="W", pady=5)
