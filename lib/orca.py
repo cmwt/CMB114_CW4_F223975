@@ -3,6 +3,6 @@
 
 basis_sets = ["def2-SVP", "def2-TZVP", "def2-TVZPP", "def2-QZVP"]
 
-methods = ["RHF", "MP2", "CCSD"]
+methods = ["RHF", "DFT", "MP2", "CCSD"]
 
-calc_type = ["Single Point Energy", "Geometry Optimisation", "Frequency"]
+calc_type = ["SP", "OPT", "OPT FREQ"]
