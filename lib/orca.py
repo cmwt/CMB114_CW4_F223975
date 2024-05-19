@@ -1,6 +1,8 @@
 # This file contains the necessary lists for the ORCA functionality of
 # the application.
 
-basis_sets = ["def2-SVP", "def2-TZVP", "6-31G", "cc-pVDZ"]
+basis_sets = ["def2-SVP", "def2-TZVP", "def2-TVZPP", "def2-QZVP"]
 
-calc_types = ["HF", "DFT", "MP2", "CCSD"]
+methods = ["RHF", "MP2", "CCSD"]
+
+calc_type = ["Single Point Energy", "Geometry Optimisation", "Frequency"]
