@@ -101,6 +101,11 @@ def clear_frame():
 
 def orca_input_file(basis_set, calc_type, coordinates):
 
+    calc_type = calc_type_drop.get()
+    basis_set = basis_set_drop.get()
+    methods = methods_drop.get()
+    smiles = custom_entry.get()
+
     filename = custom_entry.get() # Sets the filename to whatever the SMILES string is 
     
     input_dir = "ORCA_input"
