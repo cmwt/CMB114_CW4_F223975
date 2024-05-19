@@ -109,16 +109,18 @@ def orca_input_file(basis_set, calc_type, coordinates):
 
     filepath = os.path.join(input_dir, filename) # Allows a file to be opened within the new directory
 
-    with open(f"{filepath}.txt", "w") as f:
-        f.write("# CW4 - Molecular Dynamics generated ORCA input file\n")
-        f.write(f"\n! {calc_type} {basis_set}\n")
-        f.write("* xyz 0 1\n")
-        f.write(coordinates)
-        f.write("*\n")
+    if method_drop.get == "DFT": # Finish these if statements
+        with open(f"{filepath}.txt", "w") as f:
+            f.write("# CW4 - Molecular Dynamics generated ORCA input file\n")
+            f.write(f"\n!{calc_type} {basis_set}\n")
+            f.write("* xyz 0 1\n")
+            f.write(coordinates)
+            f.write("*\n")
 
 def generate_orca():
-    basis_set = basis_set_drop.get()
     calc_type = calc_type_drop.get()
+    basis_set = basis_set_drop.get()
+    method = methods_drop.get()
     smiles = custom_entry.get()
     
     # Generate cartesian coordinates from SMILES
@@ -183,27 +185,32 @@ prop_label.grid(row=6, column=1, sticky="W", pady=5)
 reference_label = tk.Label(frame)
 reference_label.grid(row=7, column=1, sticky="W", pady=5)
 
-basis_label = tk.Label(frame, text="Select Basis Set:")
-basis_label.grid(row=8, column=1, pady=5)
-basis_set_drop = ttk.Combobox(frame, textvariable=basis_sets, values=basis_sets)
-basis_set_drop.grid(row=8, column=2, padx=10, pady=5)
-
 calc_label = tk.Label(frame, text="Select Calculation Type")
-calc_label.grid(row=9, column=1, pady=5)
-calc_type_drop = ttk.Combobox(frame, textvariable=calc_types, values=calc_types)
-calc_type_drop.grid(row=9, column=2, padx=10, pady=5)
+calc_label.grid(row=8, column=1, pady=5)
+calc_type_drop = ttk.Combobox(frame, textvariable=calc_type, values=calc_type)
+calc_type_drop.grid(row=8, column=2, padx=10, pady=5)
+
+method_label = tk.Label(frame, text="Select Method:")
+method_label.grid(row=9, column=1, pady=5)
+method_drop = ttk.Combobox(frame, textvariable=methods, value=methods)
+method_drop.grid(row=9, column=2, padx=10, pady=5)
+
+basis_label = tk.Label(frame, text="Select Basis Set:")
+basis_label.grid(row=10, column=1, pady=5)
+basis_set_drop = ttk.Combobox(frame, textvariable=basis_sets, values=basis_sets)
+basis_set_drop.grid(row=10, column=2, padx=10, pady=5)
 
 gen_but = tk.Button(frame, text="Generate Orca Input", command=generate_orca)
-gen_but.grid(row=10, column=0, columnspan=2, pady=5)
+gen_but.grid(row=11, column=0, columnspan=2, pady=5)
 
 status_label = tk.Label(frame, text="")
-status_label.grid(row=11, column=0, columnspan=2, pady=5)
+status_label.grid(row=12, column=0, columnspan=2, pady=5)
 
 
-text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1°C\nMelting Point: 5.5°C",
-        "Naphthalene":"Naphthalene:\nMolar Mass: 128.17 g/mol\nBoiling Point: 218°C\nMelting Point: 80.3°C",
-        "Cyclohexane":"Cyclohexane:\nMolar Mass: 84.16 g/mol\nBoiling Point: 80.8°C\nMelting Point: 6.5°C",
-        "Acetone":"Acetone:\nMolar Mass: 58.1 g/mol\nBoiling Point: 56°C\nMelting Point: -95°C"
+text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1Â°C\nMelting Point: 5.5Â°C",
+        "Naphthalene":"Naphthalene:\nMolar Mass: 128.17 g/mol\nBoiling Point: 218Â°C\nMelting Point: 80.3Â°C",
+        "Cyclohexane":"Cyclohexane:\nMolar Mass: 84.16 g/mol\nBoiling Point: 80.8Â°C\nMelting Point: 6.5Â°C",
+        "Acetone":"Acetone:\nMolar Mass: 58.1 g/mol\nBoiling Point: 56Â°C\nMelting Point: -95Â°C"
                   }
 
 # *** Right Frame ***
