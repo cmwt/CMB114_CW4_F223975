@@ -109,10 +109,17 @@ def orca_input_file(basis_set, calc_type, coordinates):
 
     filepath = os.path.join(input_dir, filename) # Allows a file to be opened within the new directory
 
-    if method_drop.get == "DFT": # Finish these if statements
+    if methods_drop.get() == "DFT": # Finish these if statements
         with open(f"{filepath}.txt", "w") as f:
             f.write("# CW4 - Molecular Dynamics generated ORCA input file\n")
-            f.write(f"\n!{calc_type} {basis_set}\n")
+            f.write(f"\n! BP RI {calc_type} {basis_set} {basis_set}/J\n")
+            f.write("* xyz 0 1\n")
+            f.write(coordinates)
+            f.write("*\n")
+    else:
+        with open(f"{filepath}.txt", "w") as f:
+            f.write("# CW4 - Molecular Dynamics generated ORCA input file\n")
+            f.write(f"\n! {methods} {calc_type} {basis_set}\n")
             f.write("* xyz 0 1\n")
             f.write(coordinates)
             f.write("*\n")
@@ -120,7 +127,7 @@ def orca_input_file(basis_set, calc_type, coordinates):
 def generate_orca():
     calc_type = calc_type_drop.get()
     basis_set = basis_set_drop.get()
-    method = methods_drop.get()
+    methods = methods_drop.get()
     smiles = custom_entry.get()
     
     # Generate cartesian coordinates from SMILES
@@ -192,8 +199,8 @@ calc_type_drop.grid(row=8, column=2, padx=10, pady=5)
 
 method_label = tk.Label(frame, text="Select Method:")
 method_label.grid(row=9, column=1, pady=5)
-method_drop = ttk.Combobox(frame, textvariable=methods, value=methods)
-method_drop.grid(row=9, column=2, padx=10, pady=5)
+methods_drop = ttk.Combobox(frame, textvariable=methods, value=methods)
+methods_drop.grid(row=9, column=2, padx=10, pady=5)
 
 basis_label = tk.Label(frame, text="Select Basis Set:")
 basis_label.grid(row=10, column=1, pady=5)
