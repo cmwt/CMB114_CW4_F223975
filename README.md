@@ -38,7 +38,7 @@ tkinter is used for the GUI itself, however, this is a standard library of Pytho
 
 To run the code itself, the user should open the command line and navigate to the directory within which they would like to clone the repository. Then, type the following:
 
-`git clone `
+`git clone https://github.com/cmwt/CMB114_CW4_F223975.git`
 
 After this has run (the user may be prompted to sign into git on their device) navigate into the 'CMB114_CW4_F223975' directory and run:
 
