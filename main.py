@@ -164,7 +164,7 @@ def generate_orca():
 # ***************************
 
 root = tk.Tk()
-root.geometry("570x750")
+root.geometry("1200x750")
 root.configure( background = "white")
 root.title("CW4 Project - Molecular Dynamics")
 
