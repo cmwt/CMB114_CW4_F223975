@@ -197,26 +197,28 @@ prop_label.grid(row=6, column=1, sticky="W", pady=5)
 reference_label = tk.Label(frame)
 reference_label.grid(row=7, column=1, sticky="W", pady=5)
 
-calc_label = tk.Label(frame, text="Select Calculation Type")
+calc_label = tk.Label(frame, text="Select Calculation Type:")
 calc_label.grid(row=8, column=1, pady=5)
 calc_type_drop = ttk.Combobox(frame, textvariable=calc_type, values=calc_type)
 calc_type_drop.grid(row=8, column=2, padx=10, pady=5)
+calc_key = tk.Label(frame, text="SP - Single Point Energy\nOPT - Geometry Optimisation\nOPT FREQ - Frequency")
+calc_key.grid(row=9, column=1, pady=5)
 
 method_label = tk.Label(frame, text="Select Method:")
-method_label.grid(row=9, column=1, pady=5)
+method_label.grid(row=10, column=1, pady=5)
 methods_drop = ttk.Combobox(frame, textvariable=methods, value=methods)
-methods_drop.grid(row=9, column=2, padx=10, pady=5)
+methods_drop.grid(row=10, column=2, padx=10, pady=5)
 
 basis_label = tk.Label(frame, text="Select Basis Set:")
-basis_label.grid(row=10, column=1, pady=5)
+basis_label.grid(row=11, column=1, pady=5)
 basis_set_drop = ttk.Combobox(frame, textvariable=basis_sets, values=basis_sets)
-basis_set_drop.grid(row=10, column=2, padx=10, pady=5)
+basis_set_drop.grid(row=11, column=2, padx=10, pady=5)
 
 gen_but = tk.Button(frame, text="Generate Orca Input", command=generate_orca)
-gen_but.grid(row=11, column=0, columnspan=2, pady=5)
+gen_but.grid(row=12, column=0, columnspan=2, pady=5)
 
 status_label = tk.Label(frame, text="")
-status_label.grid(row=12, column=0, columnspan=2, pady=5)
+status_label.grid(row=13, column=0, columnspan=2, pady=5)
 
 
 text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1Â°C\nMelting Point: 5.5Â°C",
