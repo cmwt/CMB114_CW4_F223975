@@ -1,6 +1,8 @@
-# The purpose of this file is to build the GUI application with the tkinter module,
-# and to call on other files within the 'data' directory to use the functionalities of the
-# application.
+"""
+The purpose of this file is to build the GUI application with the tkinter module,
+and to call on other files within the 'data' directory to use the functionalities of the
+application.
+"""
 
 # ********************
 # *                  *
@@ -8,7 +10,7 @@
 # *                  *
 # ********************
 
-import tkinter as tk 
+import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
@@ -90,8 +92,8 @@ def draw_custom():
 # Clear function erase contents of right frame
 def clear_frame():
     for widgets in frame1.winfo_children():
-        widgets.destroy()
-    reference_label.configure(text="")
+        widgets.destroy() # Clears all widgets from the right-hand frame
+    reference_label.configure(text="") # Resets the properties label to display no text
 
 # *****************
 # *               *
@@ -114,7 +116,8 @@ def orca_input_file(basis_set, calc_type, coordinates):
 
     filepath = os.path.join(input_dir, filename) # Allows a file to be opened within the new directory
 
-    if methods_drop.get() == "DFT": # Finish these if statements
+    if methods_drop.get() == "DFT": # Separate if statement required since the arguments line for the ORCA
+        # input is not the same as the other methods' general style
         with open(f"{filepath}.txt", "w") as f:
             f.write("# CW4 - Molecular Dynamics generated ORCA input file\n")
             f.write(f"\n! BP RI {calc_type} {basis_set} {basis_set}/J\n")
@@ -138,12 +141,12 @@ def generate_orca():
     # Generate cartesian coordinates from SMILES
     mol2 = Chem.MolFromSmiles(smiles)
     if mol2 is None:
-        status_label.config(text="Invalid SMILES code")
+        status_label.config(text="Invalid SMILES code") # Error managment
         return
     
     mol2 = Chem.AddHs(mol2)
     AllChem.EmbedMolecule(mol2, randomSeed=42)
-    AllChem.UFFOptimizeMolecule(mol2)
+    AllChem.UFFOptimizeMolecule(mol2) # Automatically optimises molecule geometry
     
     coordinates = ""
     conf = mol2.GetConformer()
@@ -170,7 +173,7 @@ molecules = ["Benzene", "Naphthalene", "Cyclohexane", "Acetone"]
 # *** Left Frame ***
 
 frame = ttk.Frame(root, width = 400, height = 1000, borderwidth = 5, relief = tk.GROOVE)
-frame.grid_propagate(False)
+frame.grid_propagate(False) # Prevents the frame from wrapping to its contents
 frame.grid(row=1, column=1, sticky="NW")
 
 drop_label = tk.Label(frame, text = "Pre-Programmed Molecules:")
@@ -221,10 +224,10 @@ status_label = tk.Label(frame, text="")
 status_label.grid(row=13, column=0, columnspan=2, pady=5)
 
 
-text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1Â°C\nMelting Point: 5.5Â°C",
-        "Naphthalene":"Naphthalene:\nMolar Mass: 128.17 g/mol\nBoiling Point: 218Â°C\nMelting Point: 80.3Â°C",
-        "Cyclohexane":"Cyclohexane:\nMolar Mass: 84.16 g/mol\nBoiling Point: 80.8Â°C\nMelting Point: 6.5Â°C",
-        "Acetone":"Acetone:\nMolar Mass: 58.1 g/mol\nBoiling Point: 56Â°C\nMelting Point: -95Â°C"
+text = {"Benzene":"Benzene:\nMolar Mass: 78.11 g/mol\nBoiling Point: 80.1°C\nMelting Point: 5.5°C",
+        "Naphthalene":"Naphthalene:\nMolar Mass: 128.17 g/mol\nBoiling Point: 218°C\nMelting Point: 80.3°C",
+        "Cyclohexane":"Cyclohexane:\nMolar Mass: 84.16 g/mol\nBoiling Point: 80.8°C\nMelting Point: 6.5°C",
+        "Acetone":"Acetone:\nMolar Mass: 58.1 g/mol\nBoiling Point: 56°C\nMelting Point: -95°C"
                   }
 
 # *** Right Frame ***
@@ -238,8 +241,8 @@ canvas.grid(row=2, column=2)
 
 # *** Molecule images ***
 
-benz_img = Draw.MolToImage(benzene) # Creates the benzene image
-benz_photo = ImageTk.PhotoImage(benz_img) # Puts the benzene image onto a tkinter PhotoImage
+benz_img = Draw.MolToImage(benzene) # Creates the molecules image
+benz_photo = ImageTk.PhotoImage(benz_img) # Puts the image onto a tkinter PhotoImage
 
 naph_img = Draw.MolToImage(naph) 
 naph_photo = ImageTk.PhotoImage(naph_img)
