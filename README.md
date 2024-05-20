@@ -27,17 +27,18 @@ In order to install the libraries required, type the following into the command 
 
 `pip install rdkit`
 
-`pip install PIL`
-
 RDKit is the library that allows the application to process molecular data.
 
-PIL is the library that allows us to view the molecules as images and have them drawn to a tkinter canvas. 
+PIL is another library used in the code, that should come standard when downloading Python, that allows us to view the molecules as images and have them drawn to a tkinter canvas. 
 
 tkinter is used for the GUI itself, however, this is a standard library of Python and, therefore, does not need to be specifically installed. 
 
 # Purpose of the Application:
 
-This GUI-based application takes inspiration from the Avogadro software in that it can be used to view molecules and properties of these molecules can be seen on screen when selected. 
+This GUI-based application takes inspiration from the Avogadro software in that it can be used to view molecules and the properties of these pre-programmed molecules can be seen on screen when selected. As well as this feature, the user can write in their own custom molecules, as a SMILES string, for them to be drawn. Using the features of the GUI, the user can then generate an Orca input file that can be run on the command line, providing the Orca software is downloaded, to run molecular dynamics calculations on these molecules. 
+
 The code for the application is written in such a way that allows for the addition of many more molecules at a later date, allowing for databases of molecules to be read in with their SMILES code and properties being displayed within the GUI window for the user to see. 
 
 # Tutorials:
+
+For tutorials on the features of the software, and testing surrounding its more complex features, please refer to 'tutorials_and_testing.docx' in the 'docs' directory. 
